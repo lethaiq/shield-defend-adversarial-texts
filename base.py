@@ -16,8 +16,12 @@ grad_clip = 3
 save_path = './model.pt'
 patience = 3
 batch_size=256
+max_len=64
 
-train_iter, val_iter, test_iter, tokenizer = prepare_dataset_bert('bert-base-uncased', 'clickbait', batch_size=batch_size)
+train_iter, val_iter, test_iter, tokenizer = prepare_dataset_bert('bert-base-uncased', 
+                                                                'clickbait', 
+                                                                batch_size=batch_size,
+                                                                max_len=max_len)
 print("Train:", len(train_iter.dataset))
 print("Val:", len(val_iter.dataset))
 print("Test:", len(test_iter.dataset))
@@ -27,6 +31,7 @@ model = BertClassifierDARTS(model_type='bert-base-uncased',
                             output_dim=2, 
                             ensemble=0, 
                             device=device)
+model = model.to(device)
 
 parameters = model.named_parameters()
 no_decay = ["bias", "LayerNorm.weight"]
