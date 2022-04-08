@@ -17,7 +17,7 @@ def evaluate_batch_single(model, batch, allow_grad=False, preds_only=False, devi
             acc = torch.sum(preds_prob.argmax(dim=-1) == label).item()
     return preds, loss, acc
 
-def evaluate_batch(model, batch, allow_grad=False, ensemble_mean=True, train=False, preds_only=False):
+def evaluate_batch(model, batch, allow_grad=False, ensemble_mean=True, train=False, preds_only=False, device='cpu'):
     if not train:
         model.eval()
-    return evaluate_batch_single(model, batch, allow_grad, preds_only=preds_only)
+    return evaluate_batch_single(model, batch, allow_grad, preds_only=preds_only, device=device)
