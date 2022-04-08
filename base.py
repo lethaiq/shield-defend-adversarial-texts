@@ -56,7 +56,6 @@ cur_patience = 0
 
 for epoch in range(0, epochs):
     running_loss = []
-    accuracy_scores = 0
     total_train = 0
     model.train() 
 
@@ -69,10 +68,8 @@ for epoch in range(0, epochs):
         scheduler.step()
 
         running_loss.append(loss.item())
-        accuracy_scores += acc
 
     epoch_loss = np.mean(running_loss)
-    epoch_acc = accuracy_scores/total_train
 
     model.inference = True
     val_loss, val_acc, val_f1 = evaluate_without_attack(model, val_iter)
