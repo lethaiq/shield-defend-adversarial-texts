@@ -10,7 +10,7 @@ import torch.optim as optim
 
 from tqdm import tqdm
 
-device = 'cpu'
+device = 'cuda:0'
 epochs = 1
 grad_clip = 3
 save_path = './model.pt'
