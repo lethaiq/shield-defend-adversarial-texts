@@ -15,8 +15,9 @@ epochs = 1
 grad_clip = 3
 save_path = './model.pt'
 patience = 3
+batch_size=256
 
-train_iter, val_iter, test_iter, tokenizer = prepare_dataset_bert('bert-base-uncased', 'clickbait')
+train_iter, val_iter, test_iter, tokenizer = prepare_dataset_bert('bert-base-uncased', 'clickbait', batch_size=batch_size)
 print("Train:", len(train_iter.dataset))
 print("Val:", len(val_iter.dataset))
 print("Test:", len(test_iter.dataset))
