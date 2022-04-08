@@ -19,7 +19,7 @@ batch_size=256
 max_len=64
 
 train_iter, val_iter, test_iter, tokenizer = prepare_dataset_bert('bert-base-uncased', 
-                                                                'clickbait', 
+                                                                'spam', 
                                                                 batch_size=batch_size,
                                                                 max_len=max_len)
 print("Train:", len(train_iter.dataset))
