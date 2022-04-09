@@ -32,30 +32,34 @@ print("Train:", len(train_iter.dataset))
 print("Val:", len(val_iter.dataset))
 print("Test:", len(test_iter.dataset))
 
-base = BertClassifierDARTS(model_type=model_type, 
-                            freeze_bert=False, 
-                            output_dim=2, 
-                            ensemble=0, 
-                            device=device)
-base.load_state_dict(torch.load(base_save_path))
+def load_model():
+	base = BertClassifierDARTS(model_type=model_type, 
+	                            freeze_bert=False, 
+	                            output_dim=2, 
+	                            ensemble=0, 
+	                            device=device)
+	base.load_state_dict(torch.load(base_save_path))
 
-model = BertClassifierDARTS(model_type=model_type, 
-                                    freeze_bert=True,
-                                    output_dim=2, 
-                                    ensemble=1, 
-                                    N=5, 
-                                    temperature=1.0,
-                                    gumbel=1,
-                                    scaler=1,
-                                    darts=True,
-                                    device=device)
-model_dict = model.state_dict()
-pretrained_dict = base.state_dict()
-pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
-model_dict.update(pretrained_dict) 
-model.load_state_dict(model_dict)
-model.inference = False
-model = model.to(device)
+	model = BertClassifierDARTS(model_type=model_type, 
+	                                    freeze_bert=True,
+	                                    output_dim=2, 
+	                                    ensemble=1, 
+	                                    N=5, 
+	                                    temperature=1.0,
+	                                    gumbel=1,
+	                                    scaler=1,
+	                                    darts=True,
+	                                    device=device)
+	model_dict = model.state_dict()
+	pretrained_dict = base.state_dict()
+	pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
+	model_dict.update(pretrained_dict) 
+	model.load_state_dict(model_dict)
+	model.inference = False
+	model = model.to(device)
+	return model
+
+model = load_model()
 
 parameters = filter(lambda p: 'heads' in p[0], model.named_parameters())
 no_decay = ["bias", "LayerNorm.weight"]
