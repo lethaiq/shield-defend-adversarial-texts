@@ -16,7 +16,7 @@ grad_clip = 3
 save_path = './model.pt'
 patience = 2
 batch_size=128
-max_len=64
+max_len=32
 dataset_name = 'sst'
 model_type = 'bert-base-uncased'
 
