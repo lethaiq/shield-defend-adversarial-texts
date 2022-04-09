@@ -54,6 +54,12 @@ def load_attacker(name):
         attacker = oa.attackers.VIPERAttacker()
     return attacker
 
+def dataset_mapping(x):
+    return {
+        "x": x["text"],
+        "y": x["label"],
+        'target': 0 if y == 1 else 1
+    }
 
 model = BertClassifierDARTS(model_type=model_type, 
                             freeze_bert=False, 
@@ -67,4 +73,5 @@ victim = MyClassifier(model, tokenizer, batch_size=batch_size, max_len=max_len)
 attacker = load_attacker('TextBugger')
 attack_eval = oa.AttackEval(attacker, victim)
 _, _, test_dataset = load_nlp_dataset(dataset_name)
+test_dataset = test_dataset.map(dataset_mapping, batch=True)
 adversarials, result = attack_eval.eval(test_dataset, visualize=True)
