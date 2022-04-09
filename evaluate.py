@@ -36,7 +36,7 @@ class MyClassifier(oa.Classifier):
                                         max_len=self.max_len,
                                         device=self.device)
         preds = get_preds(model, data_iter)
-        print(texts, preds)
+        # print(texts, preds)
         return preds
 
 def load_attacker(name):
