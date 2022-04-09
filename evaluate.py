@@ -12,10 +12,9 @@ from utils import *
 from sklearn.metrics import f1_score, accuracy_score
 
 load_path = './model.pt'
-batch_size=1
 max_len=64
 model_type = 'bert-base-uncased'
-dataset_name = 'spam'
+dataset_name = 'clickbait'
 device = 'cuda:0'
 
 class MyClassifier(oa.Classifier):
@@ -53,7 +52,7 @@ def dataset_mapping(x):
     return {
         "x": x["text"],
         "y": x["label"],
-        'target': 0 if x["label"] == 1 else 1
+        # 'target': 0 if x["label"] == 1 else 1
     }
 
 model = BertClassifierDARTS(model_type=model_type, 
@@ -65,7 +64,7 @@ model.load_state_dict(torch.load(load_path))
 model = model.to(device)
 tokenizer = AutoTokenizer.from_pretrained(model_type)
 
-_, _, test_iter, _ = prepare_dataset_bert('bert-base-uncased', 
+_, _, test_iter, _ = prepare_dataset_bert(model_type, 
                                         dataset_name, 
                                         batch_size=32,
                                         max_len=max_len,
@@ -79,8 +78,8 @@ acc = accuracy_score(labels, preds)
 print(acc)
 print(f1)
 
-victim = MyClassifier(model, tokenizer, batch_size=batch_size, max_len=max_len, device=device)
-attacker = load_attacker('VIPER')
+victim = MyClassifier(model, tokenizer, batch_size=1, max_len=max_len, device=device)
+attacker = load_attacker('TextBugger')
 attack_eval = oa.AttackEval(attacker, victim)
 _, _, test_dataset = load_nlp_dataset(dataset_name)
 test_dataset = test_dataset.map(dataset_mapping)
