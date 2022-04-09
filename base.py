@@ -18,8 +18,9 @@ patience = 2
 batch_size=128
 max_len=64
 dataset_name = 'clickbait'
+model_type = 'bert-base-uncased'
 
-train_iter, val_iter, test_iter, tokenizer = prepare_dataset_bert('bert-base-uncased', 
+train_iter, val_iter, test_iter, tokenizer = prepare_dataset_bert(model_type, 
                                                                 dataset_name, 
                                                                 batch_size=batch_size,
                                                                 max_len=max_len,
@@ -28,7 +29,7 @@ print("Train:", len(train_iter.dataset))
 print("Val:", len(val_iter.dataset))
 print("Test:", len(test_iter.dataset))
 
-model = BertClassifierDARTS(model_type='bert-base-uncased', 
+model = BertClassifierDARTS(model_type=model_type, 
                             freeze_bert=False, 
                             output_dim=2, 
                             ensemble=0, 
@@ -57,7 +58,6 @@ best_val_loss = 9999
 cur_patience = 0
 
 for epoch in range(0, epochs):
-    running_loss = []
     total_train = 0
     model.train() 
 
@@ -68,10 +68,6 @@ for epoch in range(0, epochs):
         torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
         opt.step()
         scheduler.step()
-
-        running_loss.append(loss.item())
-
-    epoch_loss = np.mean(running_loss)
 
     model.inference = True
     val_loss, preds = evaluate_without_attack(model, val_iter)

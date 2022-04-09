@@ -2,6 +2,39 @@ import torch
 import numpy as np
 from sklearn.metrics import f1_score
 
+def get_diversity_training_term(model, batch, optimize=True, logsumexp=False):
+    l2_distance = torch.nn.MSELoss()
+    loss_func = torch.nn.CrossEntropyLoss()
+    cos = torch.nn.CosineSimilarity(dim=0, eps=1e-8)
+
+    label = batch['labels']
+    grads = []
+    for i in  range(model.N):
+        loss = loss_func(model.pred_heads[i]*model.random_key[:,i].unsqueeze(1), label.cuda()) # probs on individual
+        grad = torch.autograd.grad(loss, model.emb1, create_graph=True)[0]
+        grads.append(grad)
+
+    total_cost = []
+    total_cost_l2 = []
+    for i in range(len(grads)):
+        for j in range(len(grads)):
+            if j > i:
+                cost = cos(grads[i].contiguous().view(-1), grads[j].contiguous().view(-1))
+                cost_l2 = l2_distance(grads[i].contiguous().view(-1), grads[j].contiguous().view(-1))
+                total_cost.append(cost.unsqueeze(0))
+                total_cost_l2.append(cost_l2.unsqueeze(0))
+
+    total_cost = torch.cat(total_cost)
+    total_cost_l2 = torch.cat(total_cost_l2)
+
+    if logsumexp:
+        out = torch.logsumexp(total_cost, 0)
+    else:
+        out = torch.mean(total_cost, 0)
+    out_l2 = torch.mean(total_cost_l2, 0)
+    
+    return out, out_l2
+
 
 def evaluate_batch_single(model, batch, allow_grad=False, preds_only=False):
     loss_func = torch.nn.CrossEntropyLoss()
