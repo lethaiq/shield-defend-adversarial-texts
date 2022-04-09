@@ -97,6 +97,7 @@ model = BertClassifierDARTS(model_type=model_type,
                                     device=device)
 model.load_state_dict(torch.load(load_path))
 model = model.to(device)
+mode.inference = True
 model.eval()
 
 _, _, test_iter, _ = prepare_dataset_bert(model_type, 
