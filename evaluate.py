@@ -22,11 +22,12 @@ max_len=64
 model = 'bert-base-uncased'
 
 class MyClassifier(oa.Classifier):
-    def __init__(self, model, tokenizer, batch_size=1, max_len=64):
+    def __init__(self, model, tokenizer, batch_size=1, max_len=64, device='cpu'):
         self.model = model
         self.tokenizer = tokenizer
         self.batch_size = batch_size
         self.max_len = max_len
+        self.device = device
 
     def get_pred(self, texts):
         probs = self.get_prob(texts)
@@ -36,7 +37,8 @@ class MyClassifier(oa.Classifier):
         data_iter = prepare_single_bert(texts, [None]*len(texts), 
                                         tokenizer=self.tokenizer, 
                                         batch_size=self.batch_size, 
-                                        max_len=self.max_len)
+                                        max_len=self.max_len,
+                                        device=self.device)
         _, preds = evaluate_without_attack(model, data_iter)
         return preds
 

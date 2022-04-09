@@ -41,7 +41,7 @@ class BertVocab:
 def pad_seq(seq, max_batch_len: int, pad_value: int):
     return seq + (max_batch_len - len(seq)) * [pad_value]
 
-def collate_batch(batch, tokenizer) :
+def collate_batch(batch, tokenizer, device='cpu') :
     batch_inputs = list()
     batch_attention_masks = list()
     labels = list()
@@ -53,11 +53,11 @@ def collate_batch(batch, tokenizer) :
         batch_attention_masks += [pad_seq(item['attention_mask'], max_size, 0)]
         labels.append(item['label'])
 
-    return {"input_ids": torch.tensor(batch_inputs, dtype=torch.long),
-            "attention_mask": torch.tensor(batch_attention_masks, dtype=torch.long),
-            "labels": torch.tensor(labels, dtype=torch.long)}
+    return {"input_ids": torch.tensor(batch_inputs, dtype=torch.long).to(device),
+            "attention_mask": torch.tensor(batch_attention_masks, dtype=torch.long).to(device),
+            "labels": torch.tensor(labels, dtype=torch.long).to(device)}
 
-def prepare_single_bert(texts, tokenizer, batch_size=32, max_len=64):
+def prepare_single_bert(texts, tokenizer, batch_size=32, max_len=64, device='cpu'):
     def encode(examples):
         return tokenizer(examples['text'], truncation=True, max_length=max_len)
 
@@ -69,12 +69,12 @@ def prepare_single_bert(texts, tokenizer, batch_size=32, max_len=64):
                 dataset,
                 shuffle=False,
                 batch_size=batch_size,
-                collate_fn=lambda p: collate_batch(p, tokenizer),
+                collate_fn=lambda p: collate_batch(p, tokenizer, device),
                 drop_last=True,
             )
     return data_iter
 
-def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64):
+def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64, device='cpu'):
     train_dataset, eval_dataset, test_dataset = load_nlp_dataset(dataset_name)
     tokenizer = AutoTokenizer.from_pretrained(model)
 
@@ -98,7 +98,7 @@ def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64):
                     train_dataset,
                     shuffle=True,
                     batch_size=batch_size,
-                    collate_fn=lambda p: collate_batch(p, tokenizer),
+                    collate_fn=lambda p: collate_batch(p, tokenizer, device),
                     drop_last=True,
                 )
 
@@ -106,7 +106,7 @@ def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64):
                 eval_dataset,
                 shuffle=True,
                 batch_size=batch_size,
-                collate_fn=lambda p: collate_batch(p, tokenizer),
+                collate_fn=lambda p: collate_batch(p, tokenizer, device),
                 drop_last=True,
             )
 
@@ -114,7 +114,7 @@ def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64):
                 test_dataset,
                 shuffle=True,
                 batch_size=batch_size,
-                collate_fn=lambda p: collate_batch(p, tokenizer),
+                collate_fn=lambda p: collate_batch(p, tokenizer, device),
                 drop_last=True,
             )
 

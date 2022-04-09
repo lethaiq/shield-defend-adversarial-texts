@@ -6,9 +6,9 @@ def evaluate_batch_single(model, batch, allow_grad=False, preds_only=False, devi
     loss_func = torch.nn.CrossEntropyLoss()
     with torch.set_grad_enabled(allow_grad):
         preds_prob = []
-        seq = batch['input_ids'].to(device)
-        attn_masks = batch['attention_mask'].to(device)
-        label = batch['labels'].to(device)
+        seq = batch['input_ids']
+        attn_masks = batch['attention_mask']
+        label = batch['labels']
         preds = model(seq, attn_masks)
         if len(preds_prob) == 0:
             preds_prob = torch.nn.functional.softmax(preds, dim=-1)
