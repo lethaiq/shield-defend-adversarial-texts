@@ -9,7 +9,7 @@ import pickle
 from model import *
 from dataset import *
 from utils import *
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, accuracy_score
 
 load_path = './model.pt'
 batch_size=1
@@ -82,5 +82,7 @@ loss, preds = evaluate_without_attack(model, test_iter)
 preds = np.argmax(preds, axis=1)
 labels = [a['label'] for a in test_iter.dataset]
 f1 = f1_score(labels, preds)
+acc = accuracy_score(labels, preds)
+print(acc)
 print(f1)
 # adversarials, result = attack_eval.eval(test_dataset, visualize=True)
