@@ -69,17 +69,18 @@ victim = MyClassifier(model, tokenizer, batch_size=batch_size, max_len=max_len, 
 attacker = load_attacker('DeepWordBug')
 attack_eval = oa.AttackEval(attacker, victim)
 _, _, test_dataset = load_nlp_dataset(dataset_name)
-data_iter = DataLoader(
-            test_dataset,
-            shuffle=False,
-            batch_size=32,
-            collate_fn=lambda p: collate_batch(p, tokenizer, device),
-            drop_last=True,
-        )
-preds, loss, acc = evaluate_without_attack(model, data_iter)
+test_dataset = test_dataset.map(dataset_mapping)
+
+
+_, _, test_iter, _ = prepare_dataset_bert('bert-base-uncased', 
+                                        dataset_name, 
+                                        batch_size=32,
+                                        max_len=max_len,
+                                        device=device)
+
+preds, loss, acc = evaluate_without_attack(model, test_iter)
 labels = [a['label'] for a in dataset]
 f1 = f1_score(labels, preds)
 
-test_dataset = test_dataset.map(dataset_mapping)
 
 # adversarials, result = attack_eval.eval(test_dataset, visualize=True)
