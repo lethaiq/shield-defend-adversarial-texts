@@ -27,8 +27,8 @@ def get_preds(model, val_iter):
     model.eval()
     preds = []
     for batch in val_iter:
-        pred, loss, acc = evaluate_batch_single(model, batch)
-        preds.extend(pred.data.cpu().numpy())
+        preds_prob, loss, acc = evaluate_batch_single(model, batch)
+        preds.extend(preds_prob.data.cpu().numpy())
     preds = np.array(preds)
     return preds   
 
