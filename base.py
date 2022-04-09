@@ -15,7 +15,7 @@ epochs = 1
 grad_clip = 3
 save_path = './model.pt'
 patience = 3
-batch_size=256
+batch_size=128
 max_len=64
 
 train_iter, val_iter, test_iter, tokenizer = prepare_dataset_bert('bert-base-uncased', 
