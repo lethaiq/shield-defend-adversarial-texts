@@ -65,24 +65,23 @@ model.load_state_dict(torch.load(load_path))
 model = model.to(device)
 tokenizer = AutoTokenizer.from_pretrained(model_type)
 
+_, _, test_iter, _ = prepare_dataset_bert('bert-base-uncased', 
+                                        dataset_name, 
+                                        batch_size=32,
+                                        max_len=max_len,
+                                        device=device)
+
+loss, preds = evaluate_without_attack(model, test_iter)
+preds = np.argmax(preds, axis=1)
+labels = [a['label'] for a in test_iter.dataset]
+f1 = f1_score(labels, preds)
+acc = accuracy_score(labels, preds)
+print(acc)
+print(f1)
+
 victim = MyClassifier(model, tokenizer, batch_size=batch_size, max_len=max_len, device=device)
 attacker = load_attacker('VIPER')
 attack_eval = oa.AttackEval(attacker, victim)
 _, _, test_dataset = load_nlp_dataset(dataset_name)
 test_dataset = test_dataset.map(dataset_mapping)
 adversarials, result = attack_eval.eval(test_dataset, visualize=True)
-
-
-# _, _, test_iter, _ = prepare_dataset_bert('bert-base-uncased', 
-#                                         dataset_name, 
-#                                         batch_size=32,
-#                                         max_len=max_len,
-#                                         device=device)
-
-# loss, preds = evaluate_without_attack(model, test_iter)
-# preds = np.argmax(preds, axis=1)
-# labels = [a['label'] for a in test_iter.dataset]
-# f1 = f1_score(labels, preds)
-# acc = accuracy_score(labels, preds)
-# print(acc)
-# print(f1)

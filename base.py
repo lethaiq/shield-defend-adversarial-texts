@@ -17,7 +17,7 @@ save_path = './model.pt'
 patience = 2
 batch_size=128
 max_len=64
-dataset_name = 'hatespeech'
+dataset_name = 'clickbait'
 
 train_iter, val_iter, test_iter, tokenizer = prepare_dataset_bert('bert-base-uncased', 
                                                                 dataset_name, 
