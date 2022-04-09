@@ -24,7 +24,7 @@ class MyClassifier(oa.Classifier):
                                         batch_size=1, 
                                         max_len=self.max_len,
                                         device=self.device)
-        preds = get_preds(model, data_iter)
+        preds = get_preds(self.model, data_iter)
         # print(texts, preds)
         return preds
 
