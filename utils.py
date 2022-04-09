@@ -10,7 +10,7 @@ def evaluate_batch_single(model, batch, allow_grad=False, preds_only=False, devi
         preds_prob = []
         seq = batch['input_ids']
         attn_masks = batch['attention_mask']
-        if labels in batch:
+        if "labels" in batch:
             label = batch['labels']
         preds = model(seq, attn_masks)
         if len(preds_prob) == 0:
