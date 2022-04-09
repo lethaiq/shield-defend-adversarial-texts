@@ -42,24 +42,12 @@ model = BertClassifierDARTS(model_type=model_type,
                                     scaler=1,
                                     darts=True,
                                     device=device)
-
 model.load_state_dict(torch.load(base_save_path))
 model = model.to(device)
 
-parameters = model.named_parameters()
+parameters = filter(lambda p: 'heads' in p[0], model.named_parameters())
 no_decay = ["bias", "LayerNorm.weight"]
-optimizer_grouped_parameters = [
-    {
-        "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
-        "weight_decay": 0.01,
-    },
-    {
-        "params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
-        "weight_decay": 0.0,
-    },
-]
-opt = optim.AdamW(optimizer_grouped_parameters, lr=3e-5, eps=1e-8)
-scheduler = get_linear_schedule_with_warmup(opt, num_warmup_steps=0, num_training_steps=len(train_iter)*epochs)
+opt = optim.Adam([p[1] for p in parameters], lr=args.lr)
 
 decision_parameters = filter(lambda p: 'darts_decision' in p[0], model.named_parameters())
 opt_decision = optim.Adam([p[1] for p in decision_parameters], lr=0.25)
@@ -81,7 +69,6 @@ for epoch in range(0, epochs):
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
         opt.step()
-        scheduler.step()
 
         idx = np.random.choice(len(val_iter))
         batch_val = val_iter[idx]

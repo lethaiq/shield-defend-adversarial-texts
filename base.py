@@ -34,6 +34,7 @@ model = BertClassifierDARTS(model_type=model_type,
                             output_dim=2, 
                             ensemble=0, 
                             device=device)
+model.init_linear()
 model = model.to(device)
 
 parameters = model.named_parameters()
