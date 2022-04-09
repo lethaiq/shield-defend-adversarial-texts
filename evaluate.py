@@ -72,8 +72,6 @@ _, _, test_iter, _ = prepare_dataset_bert(model_type,
 preds = get_preds(model, test_iter)
 preds = np.argmax(preds, axis=1)
 labels = [a['label'] for a in test_iter.dataset]
-print(labels[:10])
-print(preds[:10])
 f1 = f1_score(labels, preds)
 acc = accuracy_score(labels, preds)
 print(acc)
@@ -85,6 +83,6 @@ victim = MyClassifier(model, tokenizer, batch_size=1, max_len=max_len, device=de
 attacker = load_attacker('TextBugger')
 attack_eval = oa.AttackEval(attacker, victim)
 _, _, test_dataset = load_nlp_dataset(dataset_name)
-test_dataset = test_dataset.select(range(len(20)))
+test_dataset = test_dataset.select(list(range(20)))
 test_dataset = test_dataset.map(dataset_mapping)
 adversarials, result = attack_eval.eval(test_dataset, visualize=True)
