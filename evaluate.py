@@ -72,17 +72,17 @@ _, _, test_dataset = load_nlp_dataset(dataset_name)
 test_dataset = test_dataset.map(dataset_mapping)
 
 
-_, _, test_iter, _ = prepare_dataset_bert('bert-base-uncased', 
+_, val_iter, _, _ = prepare_dataset_bert('bert-base-uncased', 
                                         dataset_name, 
                                         batch_size=32,
                                         max_len=max_len,
                                         device=device)
 
-for batch in test_iter:
+for batch in val_iter:
     print(batch)
     break
 
-preds, loss, acc = evaluate_without_attack(model, test_iter)
+preds, loss, acc = evaluate_without_attack(model, val_iter)
 labels = [a['label'] for a in dataset]
 f1 = f1_score(labels, preds)
 
