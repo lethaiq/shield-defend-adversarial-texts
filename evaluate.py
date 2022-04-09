@@ -27,7 +27,6 @@ class MyClassifier(oa.Classifier):
 
     def get_pred(self, texts):
         probs = self.get_prob(texts)
-        print(texts, probs)
         return probs.argmax(axis=1)
 
     def get_prob(self, texts):
@@ -37,6 +36,7 @@ class MyClassifier(oa.Classifier):
                                         max_len=self.max_len,
                                         device=self.device)
         preds = get_preds(model, data_iter)
+        print(texts, preds)
         return preds
 
 def load_attacker(name):
