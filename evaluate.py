@@ -64,7 +64,7 @@ model.load_state_dict(torch.load(load_path))
 model = model.to(device)
 tokenizer = AutoTokenizer.from_pretrained(model_type)
 
-_, _, test_iter, _ = prepare_dataset_bert(model_type, 
+_, test_iter, _, _ = prepare_dataset_bert(model_type, 
                                         dataset_name, 
                                         batch_size=32,
                                         max_len=max_len,
