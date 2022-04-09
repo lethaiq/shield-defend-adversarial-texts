@@ -1,5 +1,6 @@
-from datasets.utils.logging import set_verbosity_error
-set_verbosity_error()
+from datasets.utils import disable_progress_bar
+disable_progress_bar()
+
 from datasets import load_dataset
 from transformers import AutoTokenizer
 from torch.utils.data import DataLoader
