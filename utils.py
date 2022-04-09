@@ -29,6 +29,7 @@ def get_preds(model, val_iter):
     for batch in val_iter:
         pred, loss, acc = evaluate_batch_single(model, batch)
         preds.extend(pred.data.cpu().numpy())
+    preds = np.array(preds)
     return preds   
 
 def evaluate_without_attack(model, val_iter):
