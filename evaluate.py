@@ -21,6 +21,7 @@ batch_size=1
 max_len=64
 model = 'bert-base-uncased'
 dataset_name = 'spam'
+device = 'cuda:0'
 
 class MyClassifier(oa.Classifier):
     def __init__(self, model, tokenizer, batch_size=1, max_len=64, device='cpu'):
