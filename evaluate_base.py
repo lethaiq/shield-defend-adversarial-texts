@@ -12,8 +12,6 @@ model_type = 'bert-base-uncased'
 dataset_name = 'clickbait'
 device = 'cuda:0'
 attacker_name = 'BertAttack'
-
-
 rng = np.random.default_rng(12)
 
 model = BertClassifierDARTS(model_type=model_type, 
