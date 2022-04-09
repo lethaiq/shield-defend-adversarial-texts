@@ -33,7 +33,7 @@ class MyClassifier(oa.Classifier):
     def get_prob(self, texts):
         data_iter = prepare_single_bert(texts, 
                                         tokenizer=self.tokenizer, 
-                                        batch_size=self.batch_size, 
+                                        batch_size=1, 
                                         max_len=self.max_len,
                                         device=self.device)
         preds = get_preds(model, data_iter)
