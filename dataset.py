@@ -1,6 +1,7 @@
 from datasets import load_dataset
 from transformers import AutoTokenizer
 from torch.utils.data import DataLoader
+from datasets import Dataset
 import torch
 
 def load_nlp_dataset(dataset=None):
