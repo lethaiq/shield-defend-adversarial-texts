@@ -82,7 +82,7 @@ def cal_true_success_rate(advs, dataset):
     print(np.unique(labels, return_counts=True))
     print("Origin accuracy", accuracy_score(labels, pred_orgs))
     print("GEN accuracy", accuracy_score(labels, pred_gens))
-    return np.mean(success), len(success), np.sum(success)
+    return np.mean(success)
 
 
 model = BertClassifierDARTS(model_type=model_type, 
@@ -117,4 +117,5 @@ test_dataset = test_dataset.select(rng.choice(len(test_dataset), 10))
 test_dataset = test_dataset.map(dataset_mapping)
 adversarials, result = attack_eval.eval(test_dataset, visualize=True)
 
-print(cal_true_success_rate(adversarials, test_dataset))
+atk_acc = cal_true_success_rate(adversarials, test_dataset)
+print(atk_acc)
