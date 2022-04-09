@@ -89,7 +89,7 @@ def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64, device=
                 shuffle=True,
                 batch_size=batch_size,
                 collate_fn=lambda p: collate_batch(p, tokenizer, device),
-                drop_last=True,
+                drop_last=False,
             )
 
     return train_iter, val_iter, test_iter, tokenizer
