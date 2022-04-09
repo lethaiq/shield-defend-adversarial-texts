@@ -32,7 +32,6 @@ def evaluate_without_attack(model, val_iter):
     preds = []
 
     for batch in val_iter:
-        label = batch['labels'] if "bert" in str(model.name).lower() else batch.label
         pred, loss, acc = evaluate_batch(model, batch)
         val_loss.append(loss.item())
         preds.extend(pred.data.cpu().numpy())
