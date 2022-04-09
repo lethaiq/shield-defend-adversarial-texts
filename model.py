@@ -45,18 +45,14 @@ class BertClassifierDARTS(nn.Module):
         self.feature_dim = 768
         self.output_dim = output_dim
         self.ensemble = ensemble
-        self.matrix_similarty = []
         self.N = N
         self.inference = inference
         self.flg_training = is_training
-        self.trigger_token_ids = []
         self.emb1 = None
         self.temperature = temperature
-        self.type_ensemble = False
         self.embedding = self.bert_layer.get_input_embeddings()
         self.dropout = nn.Dropout(0.5)
         self.L = 3
-        self.min_batch_size = 32
         self.sample_wise_training = True
         self.darts = darts
 
