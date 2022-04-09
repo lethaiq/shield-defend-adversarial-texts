@@ -19,10 +19,12 @@ from utils import *
 load_path = './model.pt'
 batch_size=256
 max_len=64
+model = 'bert-base-uncased'
 
 class MyClassifier(oa.Classifier):
-    def __init__(self, model, batch_size=1, max_len=64):
+    def __init__(self, model, tokenizer, batch_size=1, max_len=64):
         self.model = model
+        self.tokenizer = tokenizer
         self.batch_size = batch_size
         self.max_len = max_len
 
@@ -32,10 +34,11 @@ class MyClassifier(oa.Classifier):
 
     def get_prob(self, texts):
         data_iter = prepare_single_bert(texts, [None]*len(texts), 
-            batch_size=self.batch_size, max_len=self.max_len)
+                                        tokenizer=self.tokenizer, 
+                                        batch_size=self.batch_size, 
+                                        max_len=self.max_len)
         _, preds = evaluate_without_attack(model, data_iter)
         return preds
-
 
 def load_attacker(name):
     attacker = None
@@ -48,15 +51,15 @@ def load_attacker(name):
     return attacker
 
 
-model = BertClassifierDARTS(model_type='bert-base-uncased', 
+model = BertClassifierDARTS(model_type=model, 
                             freeze_bert=False, 
                             output_dim=2, 
                             ensemble=0, 
                             device=device)
 model.load_state_dict(torch.load(load_path))
+tokenizer = AutoTokenizer.from_pretrained(model)
 
-
-victim = MyClassifier(model, batch_size=batch_size, max_len=max_len)
+victim = MyClassifier(model, tokenizer, batch_size=batch_size, max_len=max_len)
 attacker = load_attacker('TextBugger')
 attack_eval = oa.AttackEval(attacker, victim)
 dataset = load_attack_dataset('KaggleToxicComment')

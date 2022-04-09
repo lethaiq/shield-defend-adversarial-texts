@@ -39,8 +39,6 @@ class BertVocab:
             self.special_tokens_ids[str(self.stoi[token])] = 1
 
     
-def encode(examples):
-    return tokenizer(examples['text'], truncation=True, max_length=max_len)
 
 
 def collate_batch(batch) :
@@ -60,9 +58,14 @@ def collate_batch(batch) :
             "labels": torch.tensor(labels, dtype=torch.long)}
 
 
-def prepare_single_bert(texts, batch_size=32, max_len=64):
+def prepare_single_bert(texts, tokenizer, batch_size=32, max_len=64):
+    def encode(examples):
+        return tokenizer(examples['text'], truncation=True, max_length=max_len)
+
     my_dict = {"text": texts, "labels": labels}
     dataset = Dataset.from_dict(my_dict)
+    dataset = dataset.map(encode, batched=True)
+    dataset = dataset.map(lambda examples: {'labels': examples['label']}, batched=True)
     data_iter = DataLoader(
                 dataset,
                 shuffle=False,
@@ -72,12 +75,12 @@ def prepare_single_bert(texts, batch_size=32, max_len=64):
             )
     return data_iter
 
-def prepare_dataset_bert(model, dataset, batch_size=32, max_len=64):
-    train_dataset, eval_dataset, test_dataset = load_nlp_dataset(dataset)
-    tokenizer = AutoTokenizer.from_pretrained(
-            model,
-            cache_dir="~/Downloads",
-        )
+def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64):
+    train_dataset, eval_dataset, test_dataset = load_nlp_dataset(dataset_name)
+    tokenizer = AutoTokenizer.from_pretrained(model)
+
+    def encode(examples):
+        return tokenizer(examples['text'], truncation=True, max_length=max_len)
 
     train_dataset = train_dataset.map(encode, batched=True)
     train_dataset = train_dataset.map(lambda examples: {'labels': examples['label']}, batched=True)

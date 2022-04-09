@@ -85,14 +85,3 @@ for epoch in range(0, epochs):
         cur_patience += 1
         if cur_patience >= patience:
             break
-
-# model_shield = BertClassifierDARTS(model_type='bert-base-uncased', 
-#                                     freeze_bert=True,
-#                                     output_dim=2, 
-#                                     ensemble=0, 
-#                                     N=5, 
-#                                     temperature=1.0,
-#                                     gumbel=1,
-#                                     scaler=1,
-#                                     darts=True,
-#                                     device='cpu')
