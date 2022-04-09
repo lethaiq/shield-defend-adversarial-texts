@@ -82,7 +82,7 @@ for batch in test_iter:
     print(batch)
     break
 
-preds, loss, acc = evaluate_without_attack(model, test_iter)
+loss, preds = evaluate_without_attack(model, test_iter)
 labels = [a['label'] for a in dataset]
 f1 = f1_score(labels, preds)
 
