@@ -27,6 +27,7 @@ class MyClassifier(oa.Classifier):
 
     def get_pred(self, texts):
         probs = self.get_prob(texts)
+        print(texts, probs)
         return probs.argmax(axis=1)
 
     def get_prob(self, texts):
