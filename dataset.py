@@ -36,10 +36,10 @@ class BertVocab:
                 self.all_special_ids.append(_id)
         for token in self.special_tokens:
             self.all_special_ids.append(self.stoi[token])
-            self.special_tokens_ids[str(self.stoi[token])] = 1
 
     
-
+def pad_seq(seq, max_batch_len: int, pad_value: int):
+    return seq + (max_batch_len - len(seq)) * [pad_value]
 
 def collate_batch(batch) :
     batch_inputs = list()
