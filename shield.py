@@ -71,9 +71,9 @@ loss_func = nn.CrossEntropyLoss()
 best_val_loss = 9999
 cur_patience = 0
 
-val_dataset = []
+val_iter_batches = []
 for batch in val_iter:
-    val_dataset.append(batch)
+    val_iter_batches.append(batch)
 
 for epoch in range(0, epochs):
     total_train = 0
@@ -86,8 +86,8 @@ for epoch in range(0, epochs):
         torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
         opt.step()
 
-        idx = np.random.choice(len(val_dataset))
-        batch_val = val_dataset[idx]
+        idx = np.random.choice(len(val_iter_batches))
+        batch_val = val_iter_batches[idx]
         opt_decision.zero_grad()
         _, val_loss, acc = evaluate_batch_single(model, batch_val, allow_grad=True)
         reg_diversity_training, reg_diff = get_diversity_training_term(model, batch_val, logsumexp=False)
