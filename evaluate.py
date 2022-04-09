@@ -78,12 +78,8 @@ _, _, test_iter, _ = prepare_dataset_bert('bert-base-uncased',
                                         max_len=max_len,
                                         device=device)
 
-for batch in test_iter:
-    print(batch)
-    break
-
 loss, preds = evaluate_without_attack(model, test_iter)
-labels = [a['label'] for a in dataset]
+labels = [a['label'] for a in test_iter.dataset]
 f1 = f1_score(labels, preds)
 
 
