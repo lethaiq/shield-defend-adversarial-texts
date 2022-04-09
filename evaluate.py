@@ -9,6 +9,7 @@ import pickle
 from model import *
 from dataset import *
 from utils import *
+from sklearn.metrics import f1_score
 
 load_path = './model.pt'
 batch_size=1
@@ -68,7 +69,16 @@ victim = MyClassifier(model, tokenizer, batch_size=batch_size, max_len=max_len, 
 attacker = load_attacker('DeepWordBug')
 attack_eval = oa.AttackEval(attacker, victim)
 _, _, test_dataset = load_nlp_dataset(dataset_name)
-print(test_dataset[:5])
 test_dataset = test_dataset.map(dataset_mapping)
-print(test_dataset[:5])
+
+data_iter = DataLoader(
+            test_dataset,
+            shuffle=False,
+            batch_size=32,
+            collate_fn=lambda p: collate_batch(p, tokenizer, device),
+            drop_last=True,
+        )
+preds, loss, acc = evaluate_without_attack(model, data_iter)
+labels = [a['y'] for a in dataset]
+f1 = f1_score(labels, preds)
 # adversarials, result = attack_eval.eval(test_dataset, visualize=True)
