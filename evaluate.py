@@ -19,7 +19,7 @@ from utils import *
 load_path = './model.pt'
 batch_size=1
 max_len=64
-model = 'bert-base-uncased'
+model_type = 'bert-base-uncased'
 dataset_name = 'spam'
 device = 'cuda:0'
 
@@ -55,13 +55,13 @@ def load_attacker(name):
     return attacker
 
 
-model = BertClassifierDARTS(model_type=model, 
+model = BertClassifierDARTS(model_type=model_type, 
                             freeze_bert=False, 
                             output_dim=2, 
                             ensemble=0, 
                             device=device)
 model.load_state_dict(torch.load(load_path))
-tokenizer = AutoTokenizer.from_pretrained(model)
+tokenizer = AutoTokenizer.from_pretrained(model_type)
 
 victim = MyClassifier(model, tokenizer, batch_size=batch_size, max_len=max_len)
 attacker = load_attacker('TextBugger')
