@@ -3,6 +3,8 @@ from transformers import AutoTokenizer
 from torch.utils.data import DataLoader
 from datasets import Dataset
 import torch
+from datasets.utils.logging import set_verbosity_error
+set_verbosity_error()
 
 def load_nlp_dataset(dataset=None):
     data_files={'train': './dataset/{}_train.csv'.format(dataset),
