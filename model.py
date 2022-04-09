@@ -25,7 +25,6 @@ class BertClassifierDARTS(nn.Module):
                 gumbel=0,
                 scaler=0,
                 darts=True,
-                multiplier=1,
                 device='cpu'):
 
         super(BertClassifierDARTS, self).__init__()
@@ -60,7 +59,6 @@ class BertClassifierDARTS(nn.Module):
         self.min_batch_size = 32
         self.sample_wise_training = True
         self.darts = darts
-        self.multiplier = multiplier
 
         def forward_hook(module, input, output):
             self.emb1 = output
@@ -109,9 +107,6 @@ class BertClassifierDARTS(nn.Module):
         if self.gumbel > 0:
             self.probs = F.softmax(self.add_gumbel(gumbel_t)*self.temperature, dim=-1)
             gumbel_t = gumbel_t * self.probs
-
-        if self.inference and not self.flg_training and self.multiplier > 1.0:
-            gumbel_t *= self.multiplier
 
         return gumbel_t
 
