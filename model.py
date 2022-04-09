@@ -95,33 +95,19 @@ class BertClassifierDARTS(nn.Module):
     
     def select_head_gumbel_single(self, base_pred, pred_heads):
         pred_heads = torch.cat((pred_heads, base_pred),1)
-
-        if len(pred_heads) < self.min_batch_size and self.inference and not self.flg_training and not self.sample_wise_training:
-            remaining = int(self.min_batch_size/len(pred_heads))
-            pred_heads_add = pred_heads.repeat(1,remaining).view(-1, pred_heads.size()[1])
-            pred_heads_add += torch.randn(pred_heads_add.size()).to(self.device)*10
-            pred_heads = torch.cat((pred_heads_add, pred_heads), 0)
-
         gumbel_t = self.switch(pred_heads).sum(0) # [N]
-
         if self.gumbel > 0:
             self.probs = F.softmax(self.add_gumbel(gumbel_t)*self.temperature, dim=-1)
             gumbel_t = gumbel_t * self.probs
-
         return gumbel_t
 
     def select_head_gumbel(self, base_pred, pred_heads):
         pred_heads = torch.cat(pred_heads,1) # batch size * (N * num_class)
-
-        if self.sample_wise_training or self.inference:
-            all_gumbel_t = []
-            for j in range(len(pred_heads)):
-                gumbel_t_single = self.select_head_gumbel_single(base_pred[j:j+1], pred_heads[j:j+1])
-                all_gumbel_t.append(gumbel_t_single.unsqueeze(0))
-            gumbel_t = torch.cat(all_gumbel_t, 0)
-        else:
-            gumbel_t = self.select_head_gumbel_single(base_pred, pred_heads)
-        
+        all_gumbel_t = []
+        for j in range(len(pred_heads)):
+            gumbel_t_single = self.select_head_gumbel_single(base_pred[j:j+1], pred_heads[j:j+1])
+            all_gumbel_t.append(gumbel_t_single.unsqueeze(0))
+        gumbel_t = torch.cat(all_gumbel_t, 0)
         return gumbel_t
 
     def forward_from_embedding(self, emb, attn_masks):
@@ -152,11 +138,8 @@ class BertClassifierDARTS(nn.Module):
                 else:
                     self.pred_heads.append(layer[0](pred))
 
-            self.random_key = self.select_head_gumbel(pred, self.pred_heads) if self.scaler else torch.ones((len(pred),self.N)).to(self.device)
-            if self.sample_wise_training or self.inference: # sample-wise
-                pred = torch.cat([(self.pred_heads[i]*self.random_key[:,i].unsqueeze(1)).unsqueeze(1) for i in range(len(self.pred_heads))],1)
-            else: # batch-wise
-                pred = torch.cat([(self.pred_heads[i]*self.random_key[i]).unsqueeze(1) for i in range(len(self.pred_heads))],1)
+            self.random_key = self.select_head_gumbel(pred, self.pred_heads)
+            pred = torch.cat([(self.pred_heads[i]*self.random_key[:,i].unsqueeze(1)).unsqueeze(1) for i in range(len(self.pred_heads))],1)
             pred = torch.mean(pred,1)
         else:
             key1 = self.feature2main(pred)
