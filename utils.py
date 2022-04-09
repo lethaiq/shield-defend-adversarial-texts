@@ -29,19 +29,11 @@ def evaluate_without_attack(model, val_iter):
     model.eval()
     val_loss = []
     preds = []
-    labels = []
-    val_acc = 0
-    total_val = 0
 
     for batch in val_iter:
         label = batch['labels'] if "bert" in str(model.name).lower() else batch.label
         pred, loss, acc = evaluate_batch(model, batch)
         val_loss.append(loss.item())
-        val_acc += acc
-        total_val +=len(batch['input_ids'])
-        preds.extend(pred.argmax(dim=-1).data.cpu().numpy())
-        labels.extend(label.data.cpu().numpy())
+        preds.extend(pred.data.cpu().numpy())
     val_loss = np.mean(val_loss)
-    val_acc = val_acc/total_val
-    val_f1 = f1_score(labels, preds, average="weighted")  
-    return val_loss, val_acc, val_f1
+    return val_loss, preds

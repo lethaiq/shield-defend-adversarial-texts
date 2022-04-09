@@ -12,23 +12,29 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import pandas as pd
 import sys
 import pickle
+from model import *
+from dataset import *
+from utils import *
 
+load_path = './model.pt'
+batch_size=256
+max_len=64
 
 class MyClassifier(oa.Classifier):
-    def __init__(self):
-        pass
+    def __init__(self, model, batch_size=1, max_len=64):
+        self.model = model
+        self.batch_size = batch_size
+        self.max_len = max_len
 
-    def get_pred(self, input_):
-        probs = self.get_prob(input_)
+    def get_pred(self, texts):
+        probs = self.get_prob(texts)
         return probs.argmax(axis=1)
 
-    def get_prob(self, input_):
-        ret = []
-        for sent in input_:
-            pred = score_comment(sent)
-            ret.append([1-pred, pred])
-        ret = np.array(ret)
-        return ret
+    def get_prob(self, texts):
+        data_iter = prepare_single_bert(texts, [None]*len(texts), 
+            batch_size=self.batch_size, max_len=self.max_len)
+        _, preds = evaluate_without_attack(model, data_iter)
+        return preds
 
 
 def load_attacker(name):
@@ -42,7 +48,15 @@ def load_attacker(name):
     return attacker
 
 
-victim = MyClassifier()
+model = BertClassifierDARTS(model_type='bert-base-uncased', 
+                            freeze_bert=False, 
+                            output_dim=2, 
+                            ensemble=0, 
+                            device=device)
+model.load_state_dict(torch.load(load_path))
+
+
+victim = MyClassifier(model, batch_size=batch_size, max_len=max_len)
 attacker = load_attacker('TextBugger')
 attack_eval = oa.AttackEval(attacker, victim)
 dataset = load_attack_dataset('KaggleToxicComment')

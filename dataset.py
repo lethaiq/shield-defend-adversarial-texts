@@ -38,6 +38,39 @@ class BertVocab:
             self.all_special_ids.append(self.stoi[token])
             self.special_tokens_ids[str(self.stoi[token])] = 1
 
+    
+def encode(examples):
+    return tokenizer(examples['text'], truncation=True, max_length=max_len)
+
+
+def collate_batch(batch) :
+    batch_inputs = list()
+    batch_attention_masks = list()
+    labels = list()
+
+    max_size = max([len(ex['input_ids']) for ex in batch])
+    for item in batch:
+
+        batch_inputs += [pad_seq(item['input_ids'], max_size, tokenizer.pad_token_id)]
+        batch_attention_masks += [pad_seq(item['attention_mask'], max_size, 0)]
+        labels.append(item['label'])
+
+    return {"input_ids": torch.tensor(batch_inputs, dtype=torch.long),
+            "attention_mask": torch.tensor(batch_attention_masks, dtype=torch.long),
+            "labels": torch.tensor(labels, dtype=torch.long)}
+
+
+def prepare_single_bert(texts, batch_size=32, max_len=64):
+    my_dict = {"text": texts, "labels": labels}
+    dataset = Dataset.from_dict(my_dict)
+    data_iter = DataLoader(
+                dataset,
+                shuffle=False,
+                batch_size=batch_size,
+                collate_fn=collate_batch,
+                drop_last=True,
+            )
+    return data_iter
 
 def prepare_dataset_bert(model, dataset, batch_size=32, max_len=64):
     train_dataset, eval_dataset, test_dataset = load_nlp_dataset(dataset)
@@ -45,9 +78,6 @@ def prepare_dataset_bert(model, dataset, batch_size=32, max_len=64):
             model,
             cache_dir="~/Downloads",
         )
-    
-    def encode(examples):
-        return tokenizer(examples['text'], truncation=True, max_length=max_len)
 
     train_dataset = train_dataset.map(encode, batched=True)
     train_dataset = train_dataset.map(lambda examples: {'labels': examples['label']}, batched=True)
@@ -61,21 +91,6 @@ def prepare_dataset_bert(model, dataset, batch_size=32, max_len=64):
     def pad_seq(seq, max_batch_len: int, pad_value: int):
         return seq + (max_batch_len - len(seq)) * [pad_value]
 
-    def collate_batch(batch) :
-        batch_inputs = list()
-        batch_attention_masks = list()
-        labels = list()
-
-        max_size = max([len(ex['input_ids']) for ex in batch])
-        for item in batch:
-
-            batch_inputs += [pad_seq(item['input_ids'], max_size, tokenizer.pad_token_id)]
-            batch_attention_masks += [pad_seq(item['attention_mask'], max_size, 0)]
-            labels.append(item['label'])
-
-        return {"input_ids": torch.tensor(batch_inputs, dtype=torch.long),
-                "attention_mask": torch.tensor(batch_attention_masks, dtype=torch.long),
-                "labels": torch.tensor(labels, dtype=torch.long)}
 
     train_iter = DataLoader(
                     train_dataset,

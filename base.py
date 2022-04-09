@@ -72,7 +72,7 @@ for epoch in range(0, epochs):
     epoch_loss = np.mean(running_loss)
 
     model.inference = True
-    val_loss, val_acc, val_f1 = evaluate_without_attack(model, val_iter)
+    val_loss, _ = evaluate_without_attack(model, val_iter)
     model.inference = False
 
     if best_val_loss > val_loss:
