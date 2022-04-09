@@ -69,8 +69,6 @@ victim = MyClassifier(model, tokenizer, batch_size=batch_size, max_len=max_len, 
 attacker = load_attacker('DeepWordBug')
 attack_eval = oa.AttackEval(attacker, victim)
 _, _, test_dataset = load_nlp_dataset(dataset_name)
-test_dataset = test_dataset.map(dataset_mapping)
-
 data_iter = DataLoader(
             test_dataset,
             shuffle=False,
@@ -79,6 +77,9 @@ data_iter = DataLoader(
             drop_last=True,
         )
 preds, loss, acc = evaluate_without_attack(model, data_iter)
-labels = [a['y'] for a in dataset]
+labels = [a['label'] for a in dataset]
 f1 = f1_score(labels, preds)
+
+test_dataset = test_dataset.map(dataset_mapping)
+
 # adversarials, result = attack_eval.eval(test_dataset, visualize=True)
