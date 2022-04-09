@@ -4,6 +4,7 @@ from sklearn.metrics import f1_score
 import OpenAttack as oa
 from sklearn.metrics import f1_score, accuracy_score
 from datasets import Dataset
+from dataset import *
 
 class MyClassifier(oa.Classifier):
     def __init__(self, model, tokenizer, batch_size=1, max_len=64, device='cpu'):
