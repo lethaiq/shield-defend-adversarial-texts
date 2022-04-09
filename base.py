@@ -14,7 +14,7 @@ device = 'cuda:0'
 epochs = 5
 grad_clip = 3
 save_path = './model.pt'
-patience = 3
+patience = 2
 batch_size=128
 max_len=64
 dataset_name = 'spam'
@@ -74,7 +74,7 @@ for epoch in range(0, epochs):
     epoch_loss = np.mean(running_loss)
 
     model.inference = True
-    val_loss, _ = evaluate_without_attack(model, val_iter)
+    val_loss, preds = evaluate_without_attack(model, val_iter)
     model.inference = False
 
     if best_val_loss > val_loss:
