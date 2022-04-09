@@ -70,7 +70,7 @@ model.load_state_dict(torch.load(load_path))
 model = model.to(device)
 tokenizer = AutoTokenizer.from_pretrained(model_type)
 
-victim = MyClassifier(model, tokenizer, batch_size=batch_size, max_len=max_len)
+victim = MyClassifier(model, tokenizer, batch_size=batch_size, max_len=max_len, device=device)
 attacker = load_attacker('TextBugger')
 attack_eval = oa.AttackEval(attacker, victim)
 _, _, test_dataset = load_nlp_dataset(dataset_name)
