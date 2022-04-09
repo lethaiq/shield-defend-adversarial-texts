@@ -5,6 +5,8 @@ import time
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.autograd import Variable
+from torch.autograd import grad
 
 from transformers import AutoConfig
 from transformers import AutoModel
@@ -66,7 +68,6 @@ class BertClassifierDARTS(nn.Module):
         for module in self.bert_layer.modules():
             if isinstance(module, nn.Embedding):
                 if module.weight.size()[0] >= 30000:
-                    # module.register_forward_hook(forward_hook)
                     self.embedding_weight = module.weight.data.clone()
                     self.embedding_dim = self.embedding_weight.size()[1]
 
