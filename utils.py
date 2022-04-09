@@ -21,7 +21,7 @@ def evaluate_batch_single(model, batch, allow_grad=False, preds_only=False):
             if len(label)>0:
                 loss = loss_func(preds, label)
                 acc = torch.sum(preds_prob.argmax(dim=-1) == label).item()
-    return preds, loss, acc
+    return preds_prob, loss, acc
 
 def get_preds(model, val_iter):
     model.eval()
