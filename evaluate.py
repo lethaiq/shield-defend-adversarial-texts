@@ -80,7 +80,7 @@ print(f1)
 
 tokenizer = AutoTokenizer.from_pretrained(model_type)
 victim = MyClassifier(model, tokenizer, batch_size=1, max_len=max_len, device=device)
-attacker = load_attacker('TextBugger')
+attacker = load_attacker('DeepWordBug')
 attack_eval = oa.AttackEval(attacker, victim)
 _, _, test_dataset = load_nlp_dataset(dataset_name)
 # test_dataset = test_dataset.select(list(range(20)))
