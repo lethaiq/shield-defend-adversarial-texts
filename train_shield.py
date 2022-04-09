@@ -20,7 +20,7 @@ batch_size=32
 max_len=32
 dataset_name = 'sst'
 model_type = 'bert-base-uncased'
-training_temp = 1.0
+training_temp = 0.1
 alpha_darts = 0.5
 
 train_iter, val_iter, test_iter, tokenizer = prepare_dataset_bert(model_type, 
