@@ -45,7 +45,7 @@ class MyClassifier(oa.Classifier):
 
 def load_attacker(name):
     attacker = None
-    elif name == 'TextBugger':
+    if name == 'TextBugger':
         attacker = oa.attackers.TextBuggerAttacker()
     elif name == 'DeepWordBug':
         attacker = oa.attackers.DeepWordBugAttacker()
