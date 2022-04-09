@@ -81,7 +81,7 @@ def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64, device=
                 batch_size=batch_size,
                 collate_fn=lambda p: collate_batch(p, tokenizer, device),
                 drop_last=True,
-                sampler=SubsetRandomSampler()
+                sampler=SubsetRandomSampler
             )
 
     test_iter = DataLoader(
