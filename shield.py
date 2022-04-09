@@ -100,6 +100,9 @@ for epoch in range(0, epochs):
         val_loss.backward()
         opt_decision.step()
 
+    print("SHIELD NAS Decision:", 
+    	[F.softmax(model.darts_decision[i], dim=-1).detach().cpu().numpy() for i in range(model.N)])
+
     model.inference = True
     val_loss, preds = evaluate_without_attack(model, val_iter)
     model.inference = False
