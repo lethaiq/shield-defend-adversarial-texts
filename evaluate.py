@@ -63,22 +63,24 @@ model = BertClassifierDARTS(model_type=model_type,
 model.load_state_dict(torch.load(load_path))
 model = model.to(device)
 model.eval()
-tokenizer = AutoTokenizer.from_pretrained(model_type)
 
-_, test_iter, _, _ = prepare_dataset_bert(model_type, 
+_, _, test_iter, _ = prepare_dataset_bert(model_type, 
                                         dataset_name, 
                                         batch_size=32,
                                         max_len=max_len,
                                         device=device)
-
 loss, preds = evaluate_without_attack(model, test_iter)
 preds = np.argmax(preds, axis=1)
 labels = [a['label'] for a in test_iter.dataset]
+print(labels[:10])
+print(preds[:10])
 f1 = f1_score(labels, preds)
 acc = accuracy_score(labels, preds)
 print(acc)
 print(f1)
 
+
+tokenizer = AutoTokenizer.from_pretrained(model_type)
 victim = MyClassifier(model, tokenizer, batch_size=1, max_len=max_len, device=device)
 attacker = load_attacker('TextBugger')
 attack_eval = oa.AttackEval(attacker, victim)
