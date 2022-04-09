@@ -17,9 +17,10 @@ from dataset import *
 from utils import *
 
 load_path = './model.pt'
-batch_size=256
+batch_size=1
 max_len=64
 model = 'bert-base-uncased'
+dataset_name = 'spam'
 
 class MyClassifier(oa.Classifier):
     def __init__(self, model, tokenizer, batch_size=1, max_len=64, device='cpu'):
@@ -64,5 +65,5 @@ tokenizer = AutoTokenizer.from_pretrained(model)
 victim = MyClassifier(model, tokenizer, batch_size=batch_size, max_len=max_len)
 attacker = load_attacker('TextBugger')
 attack_eval = oa.AttackEval(attacker, victim)
-dataset = load_attack_dataset('KaggleToxicComment')
+_, _, test_dataset = load_nlp_dataset(dataset_name)
 adversarials, result = attack_eval.eval(dataset, visualize=True)

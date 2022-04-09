@@ -17,9 +17,10 @@ save_path = './model.pt'
 patience = 3
 batch_size=128
 max_len=64
+dataset_name = 'spam'
 
 train_iter, val_iter, test_iter, tokenizer = prepare_dataset_bert('bert-base-uncased', 
-                                                                'spam', 
+                                                                dataset_name, 
                                                                 batch_size=batch_size,
                                                                 max_len=max_len,
                                                                 device=device)

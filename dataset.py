@@ -12,31 +12,6 @@ def load_nlp_dataset(dataset=None):
     test_dataset = load_dataset('csv', data_files=data_files, split='test', ignore_verifications=False, name=dataset)
     return train_dataset, eval_dataset, test_dataset
 
-class BertVocab:
-    def __init__(self, vocab, vectors, model_type="BERT"):
-        if model_type == "BERT":
-            self.stoi = vocab.vocab
-            self.itos = vocab.ids_to_tokens
-        else:
-            self.stoi = vocab.get_vocab()
-            self.itos = {v: k for k, v in self.stoi.items()}
-        self.vectors = vectors
-        self.special_tokens = [vocab.pad_token, vocab.sep_token, vocab.unk_token, vocab.cls_token, vocab.mask_token]
-        self.stopwords_idx = [self.stoi[a] for a in stopwords.words('english') if a in self.stoi]
-        self.padding_idx = vocab.pad_token_id
-        self.tokenizer = vocab
-        self.name = model_type
-        self.unk_token = vocab.unk_token
-        self.pad_token = vocab.pad_token
-        self.special_tokens_ids = {}
-        self.all_special_ids = []
-        for token in self.stoi:
-            if '[' in token or '##' in token:
-                _id = self.stoi[token]
-                self.all_special_ids.append(_id)
-        for token in self.special_tokens:
-            self.all_special_ids.append(self.stoi[token])
-
     
 def pad_seq(seq, max_batch_len: int, pad_value: int):
     return seq + (max_batch_len - len(seq)) * [pad_value]
@@ -74,6 +49,7 @@ def prepare_single_bert(texts, tokenizer, batch_size=32, max_len=64, device='cpu
             )
     return data_iter
 
+
 def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64, device='cpu'):
     train_dataset, eval_dataset, test_dataset = load_nlp_dataset(dataset_name)
     tokenizer = AutoTokenizer.from_pretrained(model)
@@ -89,10 +65,6 @@ def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64, device=
 
     test_dataset = test_dataset.map(encode, batched=True)
     test_dataset = test_dataset.map(lambda examples: {'labels': examples['label']}, batched=True)
-
-    def pad_seq(seq, max_batch_len: int, pad_value: int):
-        return seq + (max_batch_len - len(seq)) * [pad_value]
-
 
     train_iter = DataLoader(
                     train_dataset,
