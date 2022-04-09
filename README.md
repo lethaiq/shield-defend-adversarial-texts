@@ -2,7 +2,11 @@
 Repository of the paper "SHIELD: Defending Textual Neural Networks against Multiple Black-Box Adversarial Attacks with Stochastic Multi-Expert Patcher" accepted to ACL'22 [[pdf]](https://arxiv.org/abs/2011.08908)
 
 ## Instructions
-
+Installed a customized version of the ```OpenAttack``` framework that enables extracting the generated adversarial examples. Great thanks to the ```OpenAttack``` framework that was originally available at https://github.com/thunlp/OpenAttack
+```
+cd OpenAttack
+python -m pip install -e .
+```
 Train the base model (without SHIELD protection). This will save the base model to ```model.pt``` in the current folder.
 ```
 python train_base.py
@@ -29,4 +33,5 @@ Below are results we got on 100 randomly sampled examples from the test set of t
 
 ```
 
+## Citation
 
