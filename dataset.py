@@ -3,7 +3,7 @@ disable_progress_bar()
 
 from datasets import load_dataset
 from transformers import AutoTokenizer
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, SubsetRandomSampler
 from datasets import Dataset
 import torch
 
@@ -81,6 +81,7 @@ def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64, device=
                 batch_size=batch_size,
                 collate_fn=lambda p: collate_batch(p, tokenizer, device),
                 drop_last=True,
+                sampler=SubsetRandomSampler()
             )
 
     test_iter = DataLoader(
