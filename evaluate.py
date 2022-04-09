@@ -32,7 +32,7 @@ class MyClassifier(oa.Classifier):
                                         batch_size=self.batch_size, 
                                         max_len=self.max_len,
                                         device=self.device)
-        _, preds = evaluate_without_attack(model, data_iter)
+        preds = get_preds(model, data_iter)
         return preds
 
 def load_attacker(name):

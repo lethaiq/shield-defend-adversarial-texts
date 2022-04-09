@@ -62,7 +62,7 @@ for epoch in range(0, epochs):
     model.train() 
 
     for batch in tqdm(train_iter):
-        preds, loss, acc = evaluate_batch(model, batch, allow_grad=True, train=True, device=device)
+        preds, loss, acc = evaluate_batch_single(model, batch)
         opt.zero_grad()
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)

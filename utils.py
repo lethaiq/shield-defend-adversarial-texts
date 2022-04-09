@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.metrics import f1_score
 
 
-def evaluate_batch_single(model, batch, allow_grad=False, preds_only=False, device='cpu'):
+def evaluate_batch_single(model, batch, allow_grad=False, preds_only=False):
     loss_func = torch.nn.CrossEntropyLoss()
     label = None
     with torch.set_grad_enabled(allow_grad):
@@ -23,18 +23,20 @@ def evaluate_batch_single(model, batch, allow_grad=False, preds_only=False, devi
                 acc = torch.sum(preds_prob.argmax(dim=-1) == label).item()
     return preds, loss, acc
 
-def evaluate_batch(model, batch, allow_grad=False, ensemble_mean=True, train=False, preds_only=False, device='cpu'):
-    if not train:
-        model.eval()
-    return evaluate_batch_single(model, batch, allow_grad, preds_only=preds_only, device=device)
-
+def get_preds(model, val_iter):
+    model.eval()
+    preds = []
+    for batch in val_iter:
+        pred, loss, acc = evaluate_batch_single(model, batch)
+        preds.extend(pred.data.cpu().numpy())
+    return preds   
 
 def evaluate_without_attack(model, val_iter):
     model.eval()
     val_loss = []
     preds = []
     for batch in val_iter:
-        pred, loss, acc = evaluate_batch(model, batch)
+        pred, loss, acc = evaluate_batch_single(model, batch)
         val_loss.append(loss.item())
         preds.extend(pred.data.cpu().numpy())
     val_loss = np.mean(val_loss)
