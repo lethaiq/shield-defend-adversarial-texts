@@ -12,7 +12,7 @@ max_len=64
 model_type = 'bert-base-uncased'
 dataset_name = 'clickbait'
 device = 'cuda:0'
-attacker_name = 'DeepWordBug'
+attacker_name = 'TextBugger'
 inference_temp = 0.01
 rng = np.random.default_rng(12)
 
