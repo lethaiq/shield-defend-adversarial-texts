@@ -72,7 +72,7 @@ best_val_loss = 9999
 cur_patience = 0
 
 val_dataset = []
-for batch in new_val_iter:
+for batch in val_iter:
     val_dataset.append(batch)
 
 for epoch in range(0, epochs):
