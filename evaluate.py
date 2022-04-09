@@ -1,15 +1,6 @@
 import OpenAttack as oa
-import pandas as pd
-from collections import deque
-import requests
-import re, string
-import time
-from time import sleep
-from multiprocessing.dummy import Pool as ThreadPool 
 from datasets import Dataset
-import datasets # use the Hugging Face's datasets library
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
-import pandas as pd
 import sys
 import pickle
 from model import *

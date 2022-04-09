@@ -20,7 +20,7 @@ def evaluate_batch_single(model, batch, allow_grad=False, preds_only=False, devi
         if not preds_only:
             if label:
                 loss = loss_func(preds, label)
-            acc = torch.sum(preds_prob.argmax(dim=-1) == label).item()
+                acc = torch.sum(preds_prob.argmax(dim=-1) == label).item()
     return preds, loss, acc
 
 def evaluate_batch(model, batch, allow_grad=False, ensemble_mean=True, train=False, preds_only=False, device='cpu'):
