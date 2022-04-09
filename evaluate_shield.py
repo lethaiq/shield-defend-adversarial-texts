@@ -12,7 +12,7 @@ max_len=32
 model_type = 'bert-base-uncased'
 dataset_name = 'subjectivity'
 device = 'cuda:0'
-attacker_name = 'DeepWordBug'
+attacker_name = 'TextBugger'
 inference_temp = 0.001
 rng = np.random.default_rng(12)
 
