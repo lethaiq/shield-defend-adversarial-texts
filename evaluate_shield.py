@@ -13,6 +13,7 @@ model_type = 'bert-base-uncased'
 dataset_name = 'clickbait'
 device = 'cuda:0'
 attacker_name = 'BertAttack'
+inference_temp = 1.0
 rng = np.random.default_rng(12)
 
 model = BertClassifierDARTS(model_type=model_type, 
@@ -20,7 +21,7 @@ model = BertClassifierDARTS(model_type=model_type,
                                     output_dim=2, 
                                     ensemble=1, 
                                     N=5, 
-                                    temperature=1.0,
+                                    temperature=inference_temp,
                                     gumbel=1,
                                     scaler=1,
                                     darts=True,
@@ -28,6 +29,7 @@ model = BertClassifierDARTS(model_type=model_type,
 model.load_state_dict(torch.load(load_path))
 model = model.to(device)
 model.inference = True
+model.is_training = False
 model.eval()
 
 _, _, test_iter, _ = prepare_dataset_bert(model_type, 
