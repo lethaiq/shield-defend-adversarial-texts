@@ -65,7 +65,7 @@ parameters = filter(lambda p: 'heads' in p[0], model.named_parameters())
 opt = optim.Adam([p[1] for p in parameters], lr=3e-5)
 
 decision_parameters = filter(lambda p: 'darts_decision' in p[0], model.named_parameters())
-opt_decision = optim.Adam([p[1] for p in decision_parameters], lr=0.25)
+opt_decision = optim.Adam([p[1] for p in decision_parameters], lr=0.01)
 
 
 model.train()
