@@ -35,6 +35,8 @@ def load_attacker(name):
         attacker = oa.attackers.DeepWordBugAttacker()
     elif name == 'TextFooler':
         attacker = oa.attackers.TextFoolerAttacker()
+    elif name == 'BertAttack':
+        attacker = oa.attackers.BERTAttacker()
     return attacker
 
 def dataset_mapping(x):
