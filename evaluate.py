@@ -57,6 +57,34 @@ def dataset_mapping(x):
         # 'target': 0 if x["label"] == 1 else 1
     }
 
+def cal_true_success_rate(advs, dataset):
+    success = []
+    labels = []
+    pred_orgs = []
+    pred_gens = []
+
+    for i, adv in enumerate(advs):
+        labels.append(dataset[i]['label'])
+
+        pred_org = np.argmax(adv[1])
+        pred_gen = adv[3]
+        gen = adv[2]
+
+        pred_orgs.append(pred_org)
+        pred_gens.append(np.argmax(pred_gen))
+
+        if pred_org == dataset[i]['label']:
+            if gen != None:
+                success.append(1)
+            else:
+                success.append(0)
+
+    print(np.unique(labels, return_counts=True))
+    print("Origin accuracy", accuracy_score(labels, pred_orgs))
+    print("GEN accuracy", accuracy_score(labels, pred_gens))
+    return np.mean(success), len(success), np.sum(success)
+
+
 model = BertClassifierDARTS(model_type=model_type, 
                             freeze_bert=False, 
                             output_dim=2, 
@@ -85,6 +113,8 @@ victim = MyClassifier(model, tokenizer, batch_size=1, max_len=max_len, device=de
 attacker = load_attacker('TextBugger')
 attack_eval = oa.AttackEval(attacker, victim)
 _, _, test_dataset = load_nlp_dataset(dataset_name)
-test_dataset = test_dataset.select(rng.choice(len(test_dataset), 100))
+test_dataset = test_dataset.select(rng.choice(len(test_dataset), 10))
 test_dataset = test_dataset.map(dataset_mapping)
 adversarials, result = attack_eval.eval(test_dataset, visualize=True)
+
+print(cal_true_success_rate(adversarials, test_dataset))
