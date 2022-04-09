@@ -16,6 +16,7 @@ max_len=64
 model_type = 'bert-base-uncased'
 dataset_name = 'clickbait'
 device = 'cuda:0'
+rng = np.random.default_rng(12)
 
 class MyClassifier(oa.Classifier):
     def __init__(self, model, tokenizer, batch_size=1, max_len=64, device='cpu'):
@@ -84,6 +85,6 @@ victim = MyClassifier(model, tokenizer, batch_size=1, max_len=max_len, device=de
 attacker = load_attacker('TextBugger')
 attack_eval = oa.AttackEval(attacker, victim)
 _, _, test_dataset = load_nlp_dataset(dataset_name)
-test_dataset = test_dataset.select(np.random.choice(len(test_dataset), 100))
+test_dataset = test_dataset.select(rng.choice(len(test_dataset), 100))
 test_dataset = test_dataset.map(dataset_mapping)
 adversarials, result = attack_eval.eval(test_dataset, visualize=True)
