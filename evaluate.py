@@ -58,7 +58,7 @@ def dataset_mapping(x):
     return {
         "x": x["text"],
         "y": x["label"],
-        'target': 0 if y == 1 else 1
+        'target': 0 if x["label"] == 1 else 1
     }
 
 model = BertClassifierDARTS(model_type=model_type, 
