@@ -62,6 +62,7 @@ model = BertClassifierDARTS(model_type=model_type,
                             device=device)
 model.load_state_dict(torch.load(load_path))
 model = model.to(device)
+model.eval()
 tokenizer = AutoTokenizer.from_pretrained(model_type)
 
 _, test_iter, _, _ = prepare_dataset_bert(model_type, 
