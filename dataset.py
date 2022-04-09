@@ -41,7 +41,7 @@ class BertVocab:
 def pad_seq(seq, max_batch_len: int, pad_value: int):
     return seq + (max_batch_len - len(seq)) * [pad_value]
 
-def collate_batch(batch) :
+def collate_batch(batch, tokenizer) :
     batch_inputs = list()
     batch_attention_masks = list()
     labels = list()
@@ -57,7 +57,6 @@ def collate_batch(batch) :
             "attention_mask": torch.tensor(batch_attention_masks, dtype=torch.long),
             "labels": torch.tensor(labels, dtype=torch.long)}
 
-
 def prepare_single_bert(texts, tokenizer, batch_size=32, max_len=64):
     def encode(examples):
         return tokenizer(examples['text'], truncation=True, max_length=max_len)
@@ -70,7 +69,7 @@ def prepare_single_bert(texts, tokenizer, batch_size=32, max_len=64):
                 dataset,
                 shuffle=False,
                 batch_size=batch_size,
-                collate_fn=collate_batch,
+                collate_fn=lambda p: collate_batch(p, tokenizer),
                 drop_last=True,
             )
     return data_iter
@@ -99,7 +98,7 @@ def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64):
                     train_dataset,
                     shuffle=True,
                     batch_size=batch_size,
-                    collate_fn=collate_batch,
+                    collate_fn=lambda p: collate_batch(p, tokenizer),
                     drop_last=True,
                 )
 
@@ -107,7 +106,7 @@ def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64):
                 eval_dataset,
                 shuffle=True,
                 batch_size=batch_size,
-                collate_fn=collate_batch,
+                collate_fn=lambda p: collate_batch(p, tokenizer),
                 drop_last=True,
             )
 
@@ -115,7 +114,7 @@ def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64):
                 test_dataset,
                 shuffle=True,
                 batch_size=batch_size,
-                collate_fn=collate_batch,
+                collate_fn=lambda p: collate_batch(p, tokenizer),
                 drop_last=True,
             )
 
