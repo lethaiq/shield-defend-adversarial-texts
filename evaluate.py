@@ -37,7 +37,6 @@ class MyClassifier(oa.Classifier):
 
     def get_prob(self, texts):
         data_iter = prepare_single_bert(texts, 
-                                        [None]*len(texts), 
                                         tokenizer=self.tokenizer, 
                                         batch_size=self.batch_size, 
                                         max_len=self.max_len,

@@ -33,14 +33,13 @@ def collate_batch(batch, tokenizer, device='cpu') :
             "attention_mask": torch.tensor(batch_attention_masks, dtype=torch.long).to(device),
             "labels": torch.tensor(labels, dtype=torch.long).to(device)}
 
-def prepare_single_bert(texts, labels, tokenizer, batch_size=32, max_len=64, device='cpu'):
+def prepare_single_bert(texts, tokenizer, batch_size=32, max_len=64, device='cpu'):
     def encode(examples):
         return tokenizer(examples['text'], truncation=True, max_length=max_len)
 
-    my_dict = {"text": texts, "labels": labels}
+    my_dict = {"text": texts}
     dataset = Dataset.from_dict(my_dict)
     dataset = dataset.map(encode, batched=True)
-    dataset = dataset.map(lambda examples: {'labels': examples['label']}, batched=True)
     data_iter = DataLoader(
                 dataset,
                 shuffle=False,
