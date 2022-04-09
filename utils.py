@@ -5,7 +5,7 @@ from sklearn.metrics import f1_score
 
 def evaluate_batch_single(model, batch, allow_grad=False, preds_only=False):
     loss_func = torch.nn.CrossEntropyLoss()
-    label = None
+    label = []
     with torch.set_grad_enabled(allow_grad):
         preds_prob = []
         seq = batch['input_ids']
@@ -18,7 +18,7 @@ def evaluate_batch_single(model, batch, allow_grad=False, preds_only=False):
         loss = None
         acc = None
         if not preds_only:
-            if label:
+            if len(label)>0:
                 loss = loss_func(preds, label)
                 acc = torch.sum(preds_prob.argmax(dim=-1) == label).item()
     return preds, loss, acc
