@@ -1,3 +1,5 @@
+from datasets.utils.logging import set_verbosity_error
+set_verbosity_error()
 import OpenAttack as oa
 from datasets import Dataset
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
