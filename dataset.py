@@ -47,7 +47,7 @@ def prepare_single_bert(texts, tokenizer, batch_size=32, max_len=64, device='cpu
                 shuffle=False,
                 batch_size=batch_size,
                 collate_fn=lambda p: collate_batch(p, tokenizer, device),
-                drop_last=True,
+                drop_last=False,
             )
     return data_iter
 
