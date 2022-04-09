@@ -11,7 +11,7 @@ from dataset import *
 from utils import *
 from sklearn.metrics import f1_score, accuracy_score
 
-load_path = './model.pt'
+load_path = './shield.pt'
 max_len=64
 model_type = 'bert-base-uncased'
 dataset_name = 'clickbait'
@@ -86,10 +86,15 @@ def cal_true_success_rate(advs, dataset):
 
 
 model = BertClassifierDARTS(model_type=model_type, 
-                            freeze_bert=False, 
-                            output_dim=2, 
-                            ensemble=0, 
-                            device=device)
+                                    freeze_bert=True,
+                                    output_dim=2, 
+                                    ensemble=1, 
+                                    N=5, 
+                                    temperature=1.0,
+                                    gumbel=1,
+                                    scaler=1,
+                                    darts=True,
+                                    device=device)
 model.load_state_dict(torch.load(load_path))
 model = model.to(device)
 model.eval()

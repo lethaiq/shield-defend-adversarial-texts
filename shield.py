@@ -10,7 +10,6 @@ import torch.optim as optim
 
 from tqdm import tqdm
 
-
 device = 'cuda:0'
 epochs = 5
 grad_clip = 3
@@ -62,7 +61,6 @@ def load_model():
 model = load_model()
 
 parameters = filter(lambda p: 'heads' in p[0], model.named_parameters())
-no_decay = ["bias", "LayerNorm.weight"]
 opt = optim.Adam([p[1] for p in parameters], lr=3e-5)
 
 decision_parameters = filter(lambda p: 'darts_decision' in p[0], model.named_parameters())
