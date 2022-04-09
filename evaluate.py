@@ -69,7 +69,7 @@ _, _, test_iter, _ = prepare_dataset_bert(model_type,
                                         batch_size=32,
                                         max_len=max_len,
                                         device=device)
-loss, preds = evaluate_without_attack(model, test_iter)
+preds = get_preds(model, test_iter)
 preds = np.argmax(preds, axis=1)
 labels = [a['label'] for a in test_iter.dataset]
 print(labels[:10])
