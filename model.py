@@ -132,6 +132,7 @@ class BertClassifierDARTS(nn.Module):
                         controls = F.softmax(self.darts_decision[i], dim=-1)
                         idx = torch.argmax(controls)
                         scores = layer[idx](pred)
+
                     scores = scores.view(-1, self.output_dim)
                     self.pred_heads.append(scores)
 
@@ -148,13 +149,8 @@ class BertClassifierDARTS(nn.Module):
 
         return pred
 
-    def forward(self, seq, attn_masks, perturbation=[]):
-        if len(perturbation) > 0:
-            self.emb1 = Variable(self.embedding(seq)+perturbation, requires_grad=True)
-
-        else:
-            self.emb1 = Variable(self.embedding(seq), requires_grad=True)
-
+    def forward(self, seq, attn_masks):
+        self.emb1 = Variable(self.embedding(seq), requires_grad=True)
         return self.forward_from_embedding(self.emb1, attn_masks)
 
     def add_gumbel(self, o_t, eps=1e-10):

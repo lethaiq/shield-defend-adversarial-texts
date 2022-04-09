@@ -13,7 +13,7 @@ model_type = 'bert-base-uncased'
 dataset_name = 'sst'
 device = 'cuda:0'
 attacker_name = 'TextBugger'
-inference_temp = 0.1
+inference_temp = 0.01
 rng = np.random.default_rng(12)
 
 model = BertClassifierDARTS(model_type=model_type, 
