@@ -1,0 +1,9 @@
+black
+twine
+language_tool_python
+nltk>=3.5
+numpy
+datasets
+tqdm
+transformers>=4.0.0
+torch>=1.5.1

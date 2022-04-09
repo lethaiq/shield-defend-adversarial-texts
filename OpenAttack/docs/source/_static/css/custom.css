@@ -1,0 +1,43 @@
+#project-features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+#project-features .topic {
+    width: 33%;
+    margin-bottom: 2rem;
+    flex-basis: unset !important;
+}
+
+#uses .topic div {
+    width: 20%;
+    margin-bottom: 80px;
+}
+
+#uses .topic div img {
+    margin-bottom: 20px;
+}
+
+#uses .topic div p {
+    font-size: 1rem;
+}
+
+#uses .topic {
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 2rem;
+}
+
+#data-results .topic img,
+#project-features .topic img {
+    width: 100px;
+}
+
+.main-content .body > #openattack > #project-slogans .project-slogan-long {
+    font-size: .9rem;
+}
+
+.main-content .body > #openattack > #project-features .project-feature > blockquote {
+    font-size: .9rem;
+}

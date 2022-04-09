@@ -1,0 +1,8 @@
+nltk
+numpy
+datasets
+tqdm
+transformers
+torch
+sphinx-thunlp-theme>=0.0.9
+sphinx-mathjax-offline
