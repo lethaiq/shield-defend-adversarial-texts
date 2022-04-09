@@ -83,6 +83,6 @@ victim = MyClassifier(model, tokenizer, batch_size=1, max_len=max_len, device=de
 attacker = load_attacker('TextBugger')
 attack_eval = oa.AttackEval(attacker, victim)
 _, _, test_dataset = load_nlp_dataset(dataset_name)
-test_dataset = test_dataset.select(list(range(20)))
+# test_dataset = test_dataset.select(list(range(20)))
 test_dataset = test_dataset.map(dataset_mapping)
 adversarials, result = attack_eval.eval(test_dataset, visualize=True)
