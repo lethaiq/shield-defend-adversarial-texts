@@ -1,15 +1,10 @@
 from datasets.utils.logging import set_verbosity_error
 set_verbosity_error()
 
-import OpenAttack as oa
-from datasets import Dataset
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-import sys
-import pickle
+from transformers import AutoTokenizer
 from model import *
 from dataset import *
 from utils import *
-from sklearn.metrics import f1_score, accuracy_score
 
 load_path = './model.pt'
 max_len=64
