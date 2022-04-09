@@ -18,6 +18,8 @@ rng = np.random.default_rng(12)
 
 model = BertClassifierDARTS(model_type=model_type, 
                                     freeze_bert=True,
+                                    is_training=False,
+                                    inference=True,
                                     output_dim=2, 
                                     ensemble=1, 
                                     N=5, 
@@ -28,8 +30,6 @@ model = BertClassifierDARTS(model_type=model_type,
                                     device=device)
 model.load_state_dict(torch.load(load_path))
 model = model.to(device)
-model.inference = True
-model.is_training = False
 model.eval()
 
 _, _, test_iter, _ = prepare_dataset_bert(model_type, 
