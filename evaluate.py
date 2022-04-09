@@ -68,6 +68,7 @@ victim = MyClassifier(model, tokenizer, batch_size=batch_size, max_len=max_len, 
 attacker = load_attacker('DeepWordBug')
 attack_eval = oa.AttackEval(attacker, victim)
 _, _, test_dataset = load_nlp_dataset(dataset_name)
+print(test_dataset[:5])
 test_dataset = test_dataset.map(dataset_mapping)
 print(test_dataset[:5])
-adversarials, result = attack_eval.eval(test_dataset, visualize=True)
+# adversarials, result = attack_eval.eval(test_dataset, visualize=True)
