@@ -53,5 +53,4 @@ test_dataset = test_dataset.select(rng.choice(len(test_dataset), 100))
 test_dataset = test_dataset.map(dataset_mapping)
 adversarials, result = attack_eval.eval(test_dataset, visualize=True)
 
-atk_acc = cal_true_success_rate(adversarials, test_dataset)
-print(atk_acc)
+cal_true_success_rate(adversarials, test_dataset)

@@ -25,7 +25,6 @@ class MyClassifier(oa.Classifier):
                                         max_len=self.max_len,
                                         device=self.device)
         preds = get_preds(self.model, data_iter)
-        # print(texts, preds)
         return preds
 
 def load_attacker(name):
@@ -42,7 +41,6 @@ def dataset_mapping(x):
     return {
         "x": x["text"],
         "y": x["label"],
-        # 'target': 0 if x["label"] == 1 else 1
     }
 
 def cal_true_success_rate(advs, dataset):
@@ -69,8 +67,8 @@ def cal_true_success_rate(advs, dataset):
 
     print(np.unique(labels, return_counts=True))
     print("Origin accuracy", accuracy_score(labels, pred_orgs))
-    print("GEN accuracy", accuracy_score(labels, pred_gens))
-    return np.mean(success)
+    print("Adversarial accuracy", accuracy_score(labels, pred_gens))
+    print("Attack Success Rate", np.mean(success))
 
 def get_diversity_training_term(model, batch, optimize=True, logsumexp=False):
     l2_distance = torch.nn.MSELoss()
