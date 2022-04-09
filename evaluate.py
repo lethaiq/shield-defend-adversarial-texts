@@ -79,9 +79,8 @@ _, _, test_iter, _ = prepare_dataset_bert('bert-base-uncased',
                                         device=device)
 
 loss, preds = evaluate_without_attack(model, test_iter)
+preds = np.argmax(preds, axis=1)
 labels = [a['label'] for a in test_iter.dataset]
-print(labels)
-print(preds)
 f1 = f1_score(labels, preds)
 
 
