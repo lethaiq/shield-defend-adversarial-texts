@@ -1,10 +1,11 @@
+from datasets.utils.logging import set_verbosity_error
+set_verbosity_error()
 from datasets import load_dataset
 from transformers import AutoTokenizer
 from torch.utils.data import DataLoader
 from datasets import Dataset
 import torch
-from datasets.utils.logging import set_verbosity_error
-set_verbosity_error()
+
 
 def load_nlp_dataset(dataset=None):
     data_files={'train': './dataset/{}_train.csv'.format(dataset),
@@ -39,7 +40,7 @@ def prepare_single_bert(texts, tokenizer, batch_size=32, max_len=64, device='cpu
 
     my_dict = {"text": texts}
     dataset = Dataset.from_dict(my_dict)
-    dataset = dataset.map(encode, batched=True)
+    dataset = dataset.map(encode, batched=False)
     data_iter = DataLoader(
                 dataset,
                 shuffle=False,
