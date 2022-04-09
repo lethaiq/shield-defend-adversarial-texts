@@ -9,7 +9,7 @@ from utils import *
 load_path = './model.pt'
 max_len=32
 model_type = 'bert-base-uncased'
-dataset_name = 'sst'
+dataset_name = 'subjectivity'
 device = 'cuda:0'
 attacker_name = 'TextBugger'
 rng = np.random.default_rng(12)

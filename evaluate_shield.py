@@ -10,7 +10,7 @@ from utils import *
 load_path = './shield.pt'
 max_len=32
 model_type = 'bert-base-uncased'
-dataset_name = 'sst'
+dataset_name = 'subjectivity'
 device = 'cuda:0'
 attacker_name = 'TextBugger'
 inference_temp = 0.01
