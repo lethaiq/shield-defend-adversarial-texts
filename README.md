@@ -12,7 +12,7 @@ Train the base model (without SHIELD protection). This will save the base model 
 python train_base.py
 ```
 
-Load the base model, and add the SHILED protection. Train the new model and save to ```shield.pt``` in the current folder. Please make sure that the maximum length of inputs is the same with the base model for fair comparisons. By default we use tau temperature of 1.0 for training. Often decreasing the batch_size will help the training of SHILED.
+Load the base model, and add the SHILED protection. Train the new model and save to ```shield.pt``` in the current folder. Please make sure that the maximum length of inputs is the same with the base model for fair comparisons. By default we use tau temperature of 1.0 for training. Often decreasing the batch_size will help the training of SHILED with better robustness.
 ```
 python train_shield.py
 ```
@@ -27,7 +27,7 @@ Evaluate the SHILELD-enabled model with ```OpenAttack``` framework. Often, we us
 python evaluate_shield.py
 ```
 
-Below are results we got on 100 randomly sampled examples from the test set of ```clickbait detection``` and ```subjectivity detection```. This results are different from ones in the paper as we do not use parameter-search to find the best tau temperature during training and inference. Please follow the procedure in the paper for fair comparisons. Atk % is Attack Success Rate (the lower the better).
+Below are results we got on 100 randomly sampled examples from the test set of ```clickbait detection``` and ```subjectivity detection```. This results are different from ones in the paper as we do not use parameter-search to find the best tau temperature during training and inference. Please refer to the procedure in the paper for the best results. Atk % is Attack Success Rate (the lower the better).
 <img width="890" alt="image" src="https://user-images.githubusercontent.com/13818722/162591999-8532468f-3008-41d5-978b-089c80d29894.png">
 
 ## Citation
