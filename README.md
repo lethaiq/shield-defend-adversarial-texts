@@ -31,7 +31,7 @@ Below are results we got on 100 randomly sampled examples from the test set of `
 <img width="890" alt="image" src="https://user-images.githubusercontent.com/13818722/162591999-8532468f-3008-41d5-978b-089c80d29894.png">
 
 ## Additional Results
-SHILED on ```clickbait``` dataset with ```max_len``` of 128 with attacker ```TextFooler```.
+```clickbait``` dataset with ```max_len``` of 128 with attacker ```TextFooler```.
 
 #### Evaluation on Base Model
 ```
@@ -53,7 +53,7 @@ Adversarial accuracy 0.43
 Attack Success Rate 0.28
 ```
 
-#### Evaluation on SHIELD. SHILED defends very well against TextFooler.
+#### Evaluation on SHIELD. SHILED defends very well against TextFooler. 
 ```
 ACC: 0.99
 F1: 0.9899749373433584
