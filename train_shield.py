@@ -12,6 +12,7 @@ from tqdm import tqdm
 import random
 import numpy
 import torch
+import tensorflow as tf
 
 random.seed(12)
 torch.manual_seed(12)
