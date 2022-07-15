@@ -30,6 +30,12 @@ python evaluate_shield.py
 Below are results we got on 100 randomly sampled examples from the test set of ```clickbait detection``` and ```subjectivity detection```. This results are different from ones in the paper as we do not use parameter-search to find the best tau temperature during training and inference. Please refer to the procedure in the paper for the best results. Atk % is Attack Success Rate (the lower the better).
 <img width="890" alt="image" src="https://user-images.githubusercontent.com/13818722/162591999-8532468f-3008-41d5-978b-089c80d29894.png">
 
+## A note on training
+- It is best that the NAS weight parameters converge to one-hot vector during training. For example:
+```
+SHIELD NAS Decision: [array([9.800224e-04, **9.982419e-01**, 7.780853e-04], dtype=float32), array([5.7525238e-05, 2.1913149e-04, **9.9972326e-01**], dtype=float32), array([3.141981e-04, 1.747739e-04, **9.995110e-01**], dtype=float32), array([*0.9790363* , 0.00216483, 0.01879892], dtype=float32), array([2.3515357e-04, **9.9967730e-01**, 8.7526649e-05], dtype=float32)]
+```
+
 ## Citation
 ```
 @article{le2022shield,
