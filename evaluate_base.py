@@ -1,24 +1,19 @@
 from datasets.utils.logging import set_verbosity_error
 set_verbosity_error()
 
-from contextlib import contextmanager
-
-@contextmanager
-def no_ssl_verify():
-    import ssl
-    from urllib import request
-
-    try:
-        request.urlopen.__kwdefaults__.update({'context': ssl.SSLContext()})
-        yield
-    finally:
-        request.urlopen.__kwdefaults__.update({'context': None})
-
-        
 from transformers import AutoTokenizer
 from model import *
 from dataset import *
 from utils import *
+import random
+import numpy
+import torch
+import tensorflow as tf
+
+random.seed(12)
+torch.manual_seed(12)
+tf.random.set_seed(12)
+np.random.seed(12)
 
 load_path = './model.pt'
 max_len=128
