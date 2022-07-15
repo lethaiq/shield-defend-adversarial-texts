@@ -18,6 +18,7 @@ random.seed(12)
 torch.manual_seed(12)
 tf.random.set_seed(12)
 np.random.seed(12)
+torch.use_deterministic_algorithms(True)
 
 device = 'cuda:0'
 epochs = 5
