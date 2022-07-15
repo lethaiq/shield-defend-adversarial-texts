@@ -7,11 +7,11 @@ from dataset import *
 from utils import *
 
 load_path = './model.pt'
-max_len=32
+max_len=128
 model_type = 'bert-base-uncased'
 dataset_name = 'clickbait'
 device = 'cuda:0'
-attacker_name = 'BertAttack'
+attacker_name = 'TextFooler'
 rng = np.random.default_rng(12)
 
 model = BertClassifierDARTS(model_type=model_type, 
