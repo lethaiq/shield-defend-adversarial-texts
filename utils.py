@@ -6,6 +6,20 @@ from sklearn.metrics import f1_score, accuracy_score
 from datasets import Dataset
 from dataset import *
 
+from contextlib import contextmanager
+
+@contextmanager
+def no_ssl_verify():
+    import ssl
+    from urllib import request
+
+    try:
+        request.urlopen.__kwdefaults__.update({'context': ssl.SSLContext()})
+        yield
+    finally:
+        request.urlopen.__kwdefaults__.update({'context': None})
+
+
 class MyClassifier(oa.Classifier):
     def __init__(self, model, tokenizer, batch_size=1, max_len=64, device='cpu'):
         self.model = model
@@ -29,14 +43,15 @@ class MyClassifier(oa.Classifier):
 
 def load_attacker(name):
     attacker = None
-    if name == 'TextBugger':
-        attacker = oa.attackers.TextBuggerAttacker()
-    elif name == 'DeepWordBug':
-        attacker = oa.attackers.DeepWordBugAttacker()
-    elif name == 'TextFooler':
-        attacker = oa.attackers.TextFoolerAttacker()
-    elif name == 'BertAttack':
-        attacker = oa.attackers.BERTAttacker()
+    with no_ssl_verify():
+        if name == 'TextBugger':
+            attacker = oa.attackers.TextBuggerAttacker()
+        elif name == 'DeepWordBug':
+            attacker = oa.attackers.DeepWordBugAttacker()
+        elif name == 'TextFooler':
+            attacker = oa.attackers.TextFoolerAttacker()
+        elif name == 'BertAttack':
+            attacker = oa.attackers.BERTAttacker()
     return attacker
 
 def dataset_mapping(x):

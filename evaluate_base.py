@@ -5,13 +5,22 @@ from transformers import AutoTokenizer
 from model import *
 from dataset import *
 from utils import *
+import random
+import numpy
+import torch
+import tensorflow as tf
+
+random.seed(12)
+torch.manual_seed(12)
+tf.random.set_seed(12)
+np.random.seed(12)
 
 load_path = './model.pt'
-max_len=32
+max_len=128
 model_type = 'bert-base-uncased'
-dataset_name = 'subjectivity'
+dataset_name = 'clickbait'
 device = 'cuda:0'
-attacker_name = 'BertAttack'
+attacker_name = 'TextFooler'
 rng = np.random.default_rng(12)
 
 model = BertClassifierDARTS(model_type=model_type, 
@@ -33,8 +42,8 @@ preds = np.argmax(preds, axis=1)
 labels = [a['label'] for a in test_iter.dataset]
 f1 = f1_score(labels, preds)
 acc = accuracy_score(labels, preds)
-print(acc)
-print(f1)
+print("ACC:", acc)
+print("F1:", f1)
 
 
 tokenizer = AutoTokenizer.from_pretrained(model_type)

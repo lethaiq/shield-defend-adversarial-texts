@@ -9,6 +9,16 @@ import torch.nn.functional as F
 import torch.optim as optim
 
 from tqdm import tqdm
+import random
+import numpy
+import torch
+import tensorflow as tf
+
+random.seed(12)
+torch.manual_seed(12)
+tf.random.set_seed(12)
+np.random.seed(12)
+# torch.use_deterministic_algorithms(True)
 
 device = 'cuda:0'
 epochs = 5
@@ -16,9 +26,9 @@ grad_clip = 3
 base_save_path = './model.pt'
 save_path = './shield.pt'
 patience = 2
-batch_size=16
-max_len=32
-dataset_name = 'subjectivity'
+batch_size=32
+max_len=128
+dataset_name = 'clickbait'
 model_type = 'bert-base-uncased'
 training_temp = 1.0
 alpha_darts = 0.5

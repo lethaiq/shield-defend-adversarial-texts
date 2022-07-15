@@ -6,7 +6,8 @@ from transformers import AutoTokenizer
 from torch.utils.data import DataLoader
 from datasets import Dataset
 import torch
-
+import numpy as np
+import random
 
 def load_nlp_dataset(dataset=None):
     data_files={'train': './dataset/{}_train.csv'.format(dataset),
@@ -55,6 +56,11 @@ def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64, device=
     train_dataset, eval_dataset, test_dataset = load_nlp_dataset(dataset_name)
     tokenizer = AutoTokenizer.from_pretrained(model)
 
+    def seed_worker(worker_id):
+        worker_seed = torch.initial_seed() % 2**32
+        np.random.seed(worker_seed)
+        random.seed(worker_seed)
+
     def encode(examples):
         return tokenizer(examples['text'], truncation=True, max_length=max_len)
 
@@ -72,6 +78,7 @@ def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64, device=
                     shuffle=True,
                     batch_size=batch_size,
                     collate_fn=lambda p: collate_batch(p, tokenizer, device),
+                    worker_init_fn=seed_worker,
                     drop_last=True,
                 )
 
@@ -80,6 +87,7 @@ def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64, device=
                 shuffle=True,
                 batch_size=batch_size,
                 collate_fn=lambda p: collate_batch(p, tokenizer, device),
+                worker_init_fn=seed_worker,
                 drop_last=True,
             )
 
@@ -88,6 +96,7 @@ def prepare_dataset_bert(model, dataset_name, batch_size=32, max_len=64, device=
                 shuffle=False,
                 batch_size=batch_size,
                 collate_fn=lambda p: collate_batch(p, tokenizer, device),
+                worker_init_fn=seed_worker,
                 drop_last=False,
             )
 
