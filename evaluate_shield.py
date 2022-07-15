@@ -8,7 +8,7 @@ from dataset import *
 from utils import *
 
 load_path = './shield.pt'
-max_len=32
+max_len=128
 model_type = 'bert-base-uncased'
 dataset_name = 'subjectivity'
 device = 'cuda:0'

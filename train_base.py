@@ -16,8 +16,8 @@ grad_clip = 3
 save_path = './model.pt'
 patience = 2
 batch_size=128
-max_len=32
-dataset_name = 'subjectivity'
+max_len=128
+dataset_name = 'clickbait'
 model_type = 'bert-base-uncased'
 
 train_iter, val_iter, test_iter, tokenizer = prepare_dataset_bert(model_type, 
