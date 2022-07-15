@@ -26,7 +26,7 @@ grad_clip = 3
 base_save_path = './model.pt'
 save_path = './shield.pt'
 patience = 2
-batch_size=16
+batch_size=32
 max_len=128
 dataset_name = 'clickbait'
 model_type = 'bert-base-uncased'
@@ -75,7 +75,7 @@ parameters = filter(lambda p: 'heads' in p[0], model.named_parameters())
 opt = optim.Adam([p[1] for p in parameters], lr=3e-5)
 
 decision_parameters = filter(lambda p: 'darts_decision' in p[0], model.named_parameters())
-opt_decision = optim.Adam([p[1] for p in decision_parameters], lr=0.01)
+opt_decision = optim.Adam([p[1] for p in decision_parameters], lr=0.1)
 
 
 model.train()
