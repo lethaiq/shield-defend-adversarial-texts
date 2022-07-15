@@ -18,7 +18,7 @@ np.random.seed(12)
 load_path = './model.pt'
 max_len=128
 model_type = 'bert-base-uncased'
-dataset_name = 'clickbait'
+dataset_name = 'sst'
 device = 'cuda:0'
 attacker_name = 'TextFooler'
 rng = np.random.default_rng(12)

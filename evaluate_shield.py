@@ -20,7 +20,7 @@ np.random.seed(12)
 load_path = './shield.pt'
 max_len=128
 model_type = 'bert-base-uncased'
-dataset_name = 'clickbait'
+dataset_name = 'sst'
 device = 'cuda:0'
 attacker_name = 'TextFooler'
 inference_temp = 0.01
