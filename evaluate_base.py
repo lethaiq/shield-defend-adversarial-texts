@@ -42,8 +42,8 @@ preds = np.argmax(preds, axis=1)
 labels = [a['label'] for a in test_iter.dataset]
 f1 = f1_score(labels, preds)
 acc = accuracy_score(labels, preds)
-print(acc)
-print(f1)
+print("ACC:", acc)
+print("F1:", f1)
 
 
 tokenizer = AutoTokenizer.from_pretrained(model_type)
